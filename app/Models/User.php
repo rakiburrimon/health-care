@@ -6,27 +6,28 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -46,47 +47,23 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Get the appointments for the user.
-     */
-    public function appointments()
-    {
-        return $this->hasMany(Appointment::class);
-    }
-
-    /**
-     * Get the doctor record associated with the user.
-     */
     public function doctor()
     {
         return $this->hasOne(Doctor::class);
     }
 
-    /**
-     * Get the patient record associated with the user.
-     */
     public function patient()
     {
         return $this->hasOne(Patient::class);
     }
 
-    /**
-     * Determine if the user is a doctor.
-     *
-     * @return bool
-     */
-    public function isDoctor(): bool
+    public function appointments()
     {
-        return $this->doctor !== null;
+        return $this->hasMany(Appointment::class);
     }
 
-    /**
-     * Determine if the user is a patient.
-     *
-     * @return bool
-     */
-    public function isPatient(): bool
+    public function availabilities()
     {
-        return $this->patient !== null;
+        return $this->hasMany(Availability::class);
     }
 }
