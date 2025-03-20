@@ -45,4 +45,48 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the appointments for the user.
+     */
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
+
+    /**
+     * Get the doctor record associated with the user.
+     */
+    public function doctor()
+    {
+        return $this->hasOne(Doctor::class);
+    }
+
+    /**
+     * Get the patient record associated with the user.
+     */
+    public function patient()
+    {
+        return $this->hasOne(Patient::class);
+    }
+
+    /**
+     * Determine if the user is a doctor.
+     *
+     * @return bool
+     */
+    public function isDoctor(): bool
+    {
+        return $this->doctor !== null;
+    }
+
+    /**
+     * Determine if the user is a patient.
+     *
+     * @return bool
+     */
+    public function isPatient(): bool
+    {
+        return $this->patient !== null;
+    }
 }
